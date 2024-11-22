@@ -1,0 +1,21 @@
+{
+    "name": "valtu4a/typograph",
+    "description": "PHP версия типографа Муравьева",
+    "keywords": ["типограф", "Муравьев", "typograph", "russian", "русский"],
+    "license": "Public Domain",
+    "version": "1.0.0",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Emuravjev\\Mdash\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/TestCase.php"
+        ]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8 || ^5.7"
+    }
+}

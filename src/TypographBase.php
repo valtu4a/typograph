@@ -10,10 +10,10 @@ namespace Emuravjev\Mdash;
 class TypographBase
 {
 	private $_text = "";
-	private $inited = false;
+	private $initialized = false;
 
 	/**
-	 * Список Трэтов, которые надо применить к типографированию
+	 * Список Трейтов, которые надо применить к типографированию
 	 *
 	 * @var array
 	 */
@@ -36,7 +36,7 @@ class TypographBase
 
 	public $settings = array();
 
-	protected function log($str, $data = null)
+	final protected function log($str, $data = null)
 	{
 		if(!$this->logging) return;
 		$this->logs[] = array('class' => '', 'info' => $str, 'data' => $data);
@@ -199,8 +199,8 @@ class TypographBase
     	if (count($this->_safe_blocks))
     	{
     		$safeType = true === $way ? "Lib::encrypt_tag(\$m[2])" : "stripslashes(Lib::decrypt_tag(\$m[2]))";
-    		$safeblocks = true === $way ? $this->_safe_blocks : array_reverse($this->_safe_blocks);
-       		foreach ($safeblocks as $block)
+    		$safeBlocks = true === $way ? $this->_safe_blocks : array_reverse($this->_safe_blocks);
+       		foreach ($safeBlocks as $block)
        		{
                 $text = preg_replace_callback(
                     "/({$block['open']})(.+?)({$block['close']})/s",
@@ -261,7 +261,7 @@ class TypographBase
 			$this->trait_objects[$trait] = $obj;
 		}
 
-		if(!$this->inited)
+		if(!$this->initialized)
 		{
 			$this->add_safe_tag('pre');
 			$this->add_safe_tag('script');
@@ -269,7 +269,7 @@ class TypographBase
 			$this->add_safe_tag('notg');
 			$this->add_safe_block('span-notg', '<span class="_notg_start"></span>', '<span class="_notg_end"></span>');
 		}
-		$this->inited = true;
+		$this->initialized = true;
 	}
 
 
@@ -277,7 +277,7 @@ class TypographBase
 
 
 	/**
-	 * Инициализация класса, используется чтобы задать список третов или
+	 * Инициализация класса, используется чтобы задать список трейтов или
 	 * список защищённых блоков, которые можно использовать.
 	 * Также здесь можно отменить защищённые блоки по умлочнаию
 	 *
@@ -288,7 +288,7 @@ class TypographBase
 	}
 
 	/**
-	 * Добавить трейт,
+	 * Добавить трейт
 	 *
 	 * @param mixed $class - имя класса трейта, или сам объект
 	 * @param string $altname - альтернативное имя, если мы хотим иметь два одинаковых трейта в обработке
@@ -306,8 +306,8 @@ class TypographBase
 
 			$class->EMT     = $this;
 			$class->logging = $this->logging;
-			$this->trait_objects[($altname ? $altname : get_class($class))] = $class;
-			$this->traits[] = ($altname ? $altname : get_class($class));
+			$this->trait_objects[($altname ?: get_class($class))] = $class;
+			$this->traits[] = ($altname ?: get_class($class));
 			return true;
 		}
 		if(is_string($class))
@@ -315,11 +315,11 @@ class TypographBase
 			$obj = $this->create_object($class);
 			if($obj === null)
 				return false;
-			$this->trait_objects[($altname ? $altname : $class)] = $obj;
-			$this->traits[] = ($altname ? $altname : $class);
+			$this->trait_objects[($altname ?: $class)] = $obj;
+			$this->traits[] = ($altname ?: $class);
 			return true;
 		}
-		$this->error("Чтобы добавить трэт необходимо передать имя или объект");
+		$this->error("Чтобы добавить трейт необходимо передать имя или объект");
 		return false;
 	}
 
@@ -516,11 +516,11 @@ class TypographBase
 	/**
 	 * Включить/отключить правила, согласно карте
 	 * Формат карты:
-	 *    'Название трэта 1' => array ( 'правило1', 'правило2' , ...  )
-	 *    'Название трэта 2' => array ( 'правило1', 'правило2' , ...  )
+	 *    'Название трейта 1' => array ( 'правило1', 'правило2' , ...  )
+	 *    'Название трейта 2' => array ( 'правило1', 'правило2' , ...  )
 	 *
 	 * @param array $map
-	 * @param bool $disable если ложно, то $map соотвествует тем правилам, которые надо включить
+	 * @param bool $disable если ложно, то $map соответствует тем правилам, которые надо включить
 	 *                         иначе это список правил, которые надо выключить
 	 * @param bool $strict строго, т.е. те которые не в списке будут тоже обработаны
 	 */
@@ -630,14 +630,14 @@ class TypographBase
 
 
 	/**
-	 * Установить настройки для тертов и правил
+	 * Установить настройки для трейтов и правил
 	 * 	1. если селектор является массивом, то тогда установка правил будет выполнена для каждого
 	 *     элемента этого массива, как отдельного селектора.
 	 *  2. Если $key не является массивом, то эта настройка будет проставлена согласно селектору
 	 *  3. Если $key массив - то будет задана группа настроек
 	 *       - если $value массив , то настройки определяются по ключам из массива $key, а значения из $value
 	 *       - иначе, $key содержит ключ-значение как массив
-	 *  4. $exact_match - если true тогда array selector будет соответсвовать array $key, а не произведению массивов
+	 *  4. $exact_match - если true тогда array selector будет соответствовать array $key, а не произведению массивов
 	 *
 	 * @param mixed $selector
 	 * @param mixed $key
@@ -711,39 +711,42 @@ class TypographBase
 	/**
 	 * Установить настройки
 	 *
-	 * @param array $setupmap
+	 * @param array $setupMap - массив с настройками
+     * @return void
 	 */
-	public function setup($setupmap)
-	{
-		if(!is_array($setupmap)) return;
+    final public function setup(array $setupMap): void
+    {
+        if (isset($setupMap['map']) || isset($setupMap['maps'])) {
 
-		if(isset($setupmap['map']) || isset($setupmap['maps']))
-		{
-			if(isset($setupmap['map']))
-			{
-				$ret['map'] = $test['params']['map'];
-				$ret['disable'] = $test['params']['map_disable'];
-				$ret['strict'] = $test['params']['map_strict'];
-				$test['params']['maps'] = array($ret);
-				unset($setupmap['map']);
-				unset($setupmap['map_disable']);
-				unset($setupmap['map_strict']);
-			}
-			if(is_array($setupmap['maps']))
-			{
-				foreach($setupmap['maps'] as $map)
-				{
-					$this->set_enable_map
-								($map['map'],
-								isset($map['disable']) ? $map['disable'] : false,
-								isset($map['strict']) ? $map['strict'] : false
-							);
-				}
-			}
-			unset($setupmap['maps']);
-		}
+            // Преобразование одиночной карты в maps[]
+            if (isset($setupMap['map'])) {
+                $ret = [
+                    'map' => $setupMap['map'],
+                    'disable' => $setupMap['map_disable'] ?? false,
+                    'strict' => $setupMap['map_strict'] ?? true,
+                ];
+                $setupMap['maps'] = [$ret];
+                unset($setupMap['map'], $setupMap['map_disable'], $setupMap['map_strict']);
+            }
 
+            // Применение всех карт
+            if (is_array($setupMap['maps'])) {
+                foreach ($setupMap['maps'] as $map) {
+                    $this->set_enable_map(
+                        $map['map'],
+                        $map['disable'] ?? false,
+                        $map['strict'] ?? false
+                    );
+                }
+            }
 
-		foreach($setupmap as $k => $v) $this->do_setup($k , $v);
-	}
+            unset($setupMap['maps']);
+        }
+
+        // Применение оставшихся настроек
+        foreach ($setupMap as $key => $value) {
+            $this->do_setup($key, $value);
+        }
+    }
+
 }

@@ -10,9 +10,7 @@ class Abbr extends Base
 {
 	public $title = "Сокращения";
 
-	public $domain_zones = array('ru','ру','com','ком','org','орг', 'уа', 'ua');
-
-	public $classes = array(
+    public $classes = array(
 			'nowrap'           => 'word-spacing:nowrap;',
 			);
 

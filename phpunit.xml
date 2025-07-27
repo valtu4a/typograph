@@ -1,16 +1,28 @@
-<!-- phpunit.xml.dist -->
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         bootstrap="vendor/autoload.php"
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false">
+         stopOnFailure="false"
+         verbose="true">
+
     <testsuites>
-        <testsuite name="MDash Typographer tests">
-            <directory>tests/unit</directory>
+        <testsuite name="Mdash Typograph Test Suite">
+            <directory>tests/</directory>
         </testsuite>
     </testsuites>
+
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory>src/</directory>
+        </include>
+
+        <report>
+            <html outputDirectory="tests/log/coverage" />
+            <clover outputFile="tests/log/clover.xml" />
+            <text outputFile="tests/log/coverage.txt" />
+        </report>
+    </coverage>
+
+    <logging>
+        <junit outputFile="tests/log/junit.xml"/>
+    </logging>
 </phpunit>

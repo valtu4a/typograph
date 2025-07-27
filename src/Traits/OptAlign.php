@@ -76,5 +76,3 @@ class OptAlign extends Base
 
 
 }
-
-?>

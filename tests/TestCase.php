@@ -1,17 +1,21 @@
 <?php
+
+namespace Tests;
+
 use Emuravjev\Mdash\Typograph;
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
 /**
  * Base class for all tests.
  */
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends PHPUnitTestCase
 {
     /**
-     * Массив тестов вида ['text' => 'Text to test', 'result' => 'Expected result']
+     * Array of tests ['text' => 'Text to test', 'result' => 'Expected result']
      *
      * @var array
      */
-    protected $tests;
+    protected  $tests;
 
     /**
      * @var Typograph
@@ -19,20 +23,29 @@ class TestCase extends \PHPUnit_Framework_TestCase
     protected $typographer;
 
     /**
-     * @return void
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->typographer = new Emuravjev\Mdash\Typograph();
-    }
-
-    /**
-     * Запускает тесты.
+     * Test setup, runs before each test case and sets up typographer
      *
      * @return void
      */
-    protected function runTypographerTests()
+    final public function setUp(): void
+    {
+        parent::setUp();
+        $this->typographer = new Typograph();
+        // Adding typographer options for tests
+        $this->typographer->setup([
+            'OptAlign.all' => 'off',
+            'Text.paragraphs' => 'off',
+            'Text.breakline' => 'off',
+            'Number.numeric_sub' => 'off'
+        ]);
+    }
+
+    /**
+     * Runs tests
+     *
+     * @return void
+     */
+    final public function runTypographerTests(): void
     {
         foreach ($this->tests as $test) {
             $this->typographer->set_text($test['text']);

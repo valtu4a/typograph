@@ -2,16 +2,17 @@
 
 namespace Emuravjev\Mdash;
 
+
 class Typograph extends TypographBase
 {
-	public $traits = array('Quote', 'Dash', 'Symbol', 'Punctmark', 'Number',  'Space', 'Abbr',  'Nobr', 'Date', 'OptAlign', 'Etc', 'Text');
+	public $traits = array('Quote', 'Dash', 'Symbol', 'Punctuation', 'Number',  'Space', 'Abbr',  'Nobr', 'Date', 'OptAlign', 'Etc', 'Text');
 
 	protected $group_list  = array(
 		'Quote'     => true,
 		'Dash'      => true,
 		'Nobr'      => true,
 		'Symbol'    => true,
-		'Punctmark' => true,
+		'Punctuation' => true,
 		'Number'    => true,
 		'Date'      => true,
 		'Space'     => true,
@@ -58,11 +59,11 @@ class Typograph extends TypographBase
 		'Symbol.arrows_symbols' => 'direct',
 		'Symbol.no_inches' => array( 'description' => 'Расстановка дюйма после числа', 'selector' => "Quote", 'setting' => 'no_inches', 'reversed' => true ),
 
-		'Punctmark.auto_comma' => 'direct',
-		'Punctmark.hellip' => 'direct',
-		'Punctmark.fix_pmarks' => 'direct',
-		'Punctmark.fix_excl_quest_marks' => 'direct',
-		'Punctmark.dot_on_end' => 'direct',
+		'Punctuation.auto_comma' => 'direct',
+		'Punctuation.hellip' => 'direct',
+		'Punctuation.fix_double_marks' => 'direct',
+		'Punctuation.fix_excl_quest_marks' => 'direct',
+		'Punctuation.dot_on_end' => 'direct',
 
 		'Number.minus_between_nums' => 'direct',
 		'Number.minus_in_numbers_range' => 'direct',
@@ -99,7 +100,7 @@ class Typograph extends TypographBase
 		'Space.clear_before_after_punct' => array( 'description' => 'Удаление пробелов перед и после знаков препинания в предложении', 'selector' => 'Space.remove_space_before_punctuationmarks'),
 		'Space.autospace_after' => array( 'description' => 'Расстановка пробелов после знаков препинания', 'selector' => 'Space.autospace_after_*'),
 		'Space.bracket_fix' => array( 'description' => 'Удаление пробелов внутри скобок, а также расстановка пробела перед скобками',
-				'selector' => array('Space.nbsp_before_open_quote', 'Punctmark.fix_brackets')),
+				'selector' => array('Space.nbsp_before_open_quote', 'Punctuation.fix_brackets')),
 
         // Abbreviation-related rules
         'Abbr.nbsp_money_abbr' => array(
@@ -146,17 +147,17 @@ class Typograph extends TypographBase
 	 *
 	 * @return array
 	 *     all    - полный список
-	 *     group  - сгруппированный по группам
+	 *     group  - собранный по группам
 	 */
-	public function get_options_list()
+	final public function get_options_list()
 	{
 		$arr['all'] = array();
-		$bygroup = array();
+		$by_group = array();
 		foreach($this->all_options as $opt => $op)
 		{
 			$arr['all'][$opt] = $this->get_option_info($opt);
 			$x = explode(".",$opt);
-			$bygroup[$x[0]][] = $opt;
+			$by_group[$x[0]][] = $opt;
 		}
 		$arr['group'] = array();
 		foreach($this->group_list as $group => $ginfo)
@@ -170,7 +171,7 @@ class Typograph extends TypographBase
 			}
 			$info['name'] = $group;
 			$info['options'] = array();
-			if(is_array($bygroup[$group])) foreach($bygroup[$group] as $opt) $info['options'][] = $opt;
+			if(is_array($by_group[$group])) foreach($by_group[$group] as $opt) $info['options'][] = $opt;
 			$arr['group'][] = $info;
 		}
 		return $arr;
@@ -183,7 +184,7 @@ class Typograph extends TypographBase
 	 * @param string $key
 	 * @return array|false
 	 */
-	protected function get_option_info($key)
+	final protected function get_option_info($key)
 	{
 		if(!isset($this->all_options[$key])) return false;
 		if(is_array($this->all_options[$key])) return $this->all_options[$key];
@@ -209,7 +210,7 @@ class Typograph extends TypographBase
 	 * @param string $name
 	 * @param mixed $value
 	 */
-	public function do_setup($name, $value)
+	final public function do_setup($name, $value)
 	{
 		if(!isset($this->all_options[$name])) return;
 
@@ -223,9 +224,9 @@ class Typograph extends TypographBase
 		{
 			if(isset($this->all_options[$name]['selector']))
 			{
-				$settingname = "active";
-				if(isset($this->all_options[$name]['setting'])) $settingname = $this->all_options[$name]['setting'];
-				$this->set($this->all_options[$name]['selector'], $settingname, $value, isset($this->all_options[$name]['exact_selector']));
+				$setting_name = "active";
+				if(isset($this->all_options[$name]['setting'])) $setting_name = $this->all_options[$name]['setting'];
+				$this->set($this->all_options[$name]['selector'], $setting_name, $value, isset($this->all_options[$name]['exact_selector']));
 			}
 		}
 
@@ -244,7 +245,7 @@ class Typograph extends TypographBase
 	 * @param array $options
 	 * @return string
 	 */
-	public static function fast_apply($text, $options = null)
+	public static function fast_apply(string $text, $options = null)
 	{
 		$obj = new self();
 		if(is_array($options)) {

@@ -182,7 +182,7 @@ class Lib
                 $ignore = implode('', $tags);
             }
         }
-        $text = preg_replace(array('/\<br\s*\/?>/i', '/\<\/p\>\s*\<p\>/'), array("\n","\n\n"), $text);
+        $text = preg_replace(array('/<br\s*\/?>/i', '/\<\/p\>\s*\<p\>/'), array("\n","\n\n"), $text);
         $text = strip_tags($text, $ignore);
         return $text;
     }
@@ -201,13 +201,13 @@ class Lib
     {
         if ($way)
             $text = preg_replace_callback(
-                '/(\<\/?)([^<>]+?)(\>)/s',
+                '/(<\/?)([^<>]+?)(>)/s',
                 function($m) { return (strlen($m[1])==1 && substr(trim($m[2]), 0, 1) == '-' && substr(trim($m[2]), 1, 1) != '-') ? $m[0] : $m[1].( substr(trim($m[2]), 0, 1) === "a" ? "%%___"  : "") . self::encrypt_tag(trim($m[2])) . $m[3]; },
                 $text
             );
         else
             $text = preg_replace_callback(
-                '/(\<\/?)([^<>]+?)(\>)/s',
+                '/(<\/?)([^<>]+?)(>)/s',
                 function($m) { return (strlen($m[1])==1 && substr(trim($m[2]), 0, 1) == '-' && substr(trim($m[2]), 1, 1) != '-')? $m[0] : $m[1].( substr(trim($m[2]), 0, 3) === "%%___" ? self::decrypt_tag(substr(trim($m[2]), 4)) : self::decrypt_tag(trim($m[2])) ) . $m[3]; },
                 $text
             );

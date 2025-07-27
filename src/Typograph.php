@@ -2,16 +2,17 @@
 
 namespace Emuravjev\Mdash;
 
+
 class Typograph extends TypographBase
 {
-	public $trets = array('Quote', 'Dash', 'Symbol', 'Punctmark', 'Number',  'Space', 'Abbr',  'Nobr', 'Date', 'OptAlign', 'Etc', 'Text');
+	public $traits = array('Quote', 'Dash', 'Symbol', 'Punctuation', 'Number',  'Space', 'Abbr',  'Nobr', 'Date', 'OptAlign', 'Etc', 'Text');
 
 	protected $group_list  = array(
 		'Quote'     => true,
 		'Dash'      => true,
 		'Nobr'      => true,
 		'Symbol'    => true,
-		'Punctmark' => true,
+		'Punctuation' => true,
 		'Number'    => true,
 		'Date'      => true,
 		'Space'     => true,
@@ -29,17 +30,26 @@ class Typograph extends TypographBase
 		'Dash.iz_za_pod' => 'direct',
 		'Dash.ka_de_kas' => 'direct',
 
-		'Nobr.super_nbsp' => 'direct',
-		'Nobr.nbsp_in_the_end' => 'direct',
-		'Nobr.phone_builder' => 'direct',
-		'Nobr.phone_builder_v2' => 'direct',
-		'Nobr.ip_address' => 'direct',
-		'Nobr.spaces_nobr_in_surname_abbr' => 'direct',
-		'Nobr.dots_for_surname_abbr' => 'direct',
-		'Nobr.nbsp_celcius' => 'direct',
-		'Nobr.hyphen_nowrap_in_small_words' => 'direct',
-		'Nobr.hyphen_nowrap' => 'direct',
-		'Nobr.nowrap' => array('description' => 'Nobr (по умолчанию) & nowrap', 'disabled' => true, 'selector' => '*', 'setting' => 'nowrap' ),
+        'Nobr.super_nbsp' => 'direct',
+        'Nobr.nbsp_in_the_end' => 'direct',
+        'Nobr.phone_builder' => 'direct',
+        'Nobr.phone_builder_v2' => 'direct',
+        'Nobr.ip_address' => 'direct',
+        'Nobr.spaces_nobr_in_surname_abbr' => 'direct',
+        'Nobr.dots_for_surname_abbr' => 'direct',
+        'Nobr.nbsp_celsius' => 'direct',
+        'Nobr.hyphen_nowrap_in_small_words' => 'direct',
+        'Nobr.hyphen_nowrap' => 'direct',
+        'Nobr.nowrap' => array(
+            'description' => 'Nobr (по умолчанию) & nowrap',
+            'disabled' => true,
+            'selector' => '*',
+            'setting' => 'nowrap'
+        ),
+        'Nobr.twosym_abbr' => array(
+            'description' => 'Неразрывный пробел перед двухсимвольной аббревиатурой',
+            'selector' => "Nobr.nobr_twosym_abbr"
+        ),
 
 		'Symbol.tm_replace'     => 'direct',
 		'Symbol.r_sign_replace' => 'direct',
@@ -49,11 +59,11 @@ class Typograph extends TypographBase
 		'Symbol.arrows_symbols' => 'direct',
 		'Symbol.no_inches' => array( 'description' => 'Расстановка дюйма после числа', 'selector' => "Quote", 'setting' => 'no_inches', 'reversed' => true ),
 
-		'Punctmark.auto_comma' => 'direct',
-		'Punctmark.hellip' => 'direct',
-		'Punctmark.fix_pmarks' => 'direct',
-		'Punctmark.fix_excl_quest_marks' => 'direct',
-		'Punctmark.dot_on_end' => 'direct',
+		'Punctuation.auto_comma' => 'direct',
+		'Punctuation.hellip' => 'direct',
+		'Punctuation.fix_double_marks' => 'direct',
+		'Punctuation.fix_excl_quest_marks' => 'direct',
+		'Punctuation.dot_on_end' => 'direct',
 
 		'Number.minus_between_nums' => 'direct',
 		'Number.minus_in_numbers_range' => 'direct',
@@ -67,30 +77,50 @@ class Typograph extends TypographBase
 		'Number.thinsp_between_no_and_number' => 'direct',
 		'Number.thinsp_between_sect_and_number' => 'direct',
 
-		'Date.years' => 'direct',
-		'Date.mdash_month_interval' => 'direct',
-		'Date.nbsp_and_dash_month_interval' => 'direct',
-		'Date.nobr_year_in_date' => 'direct',
+        // Date-related rules
+        'Date.years' => 'direct', // Matches years
+        'Date.mdash_month_interval' => 'direct', // Matches mdash_month_interval
+        'Date.nbsp_and_dash_month_interval' => 'direct', // Matches nbsp_and_dash_month_interval
+        'Date.nobr_year_in_date' => 'direct', // Matches nobr_year_in_date
+        'Date.nbsp_before_month' => array(
+            'description' => 'Неразрывный пробел в датах перед числом и месяцем',
+            'selector' => "Date.nbsp_before_month"
+        ),
+        'Date.space_after_year' => array(
+            'description' => 'Пробел после года',
+            'selector' => "Date.space_after_year"
+        ),
+        'Date.nbsp_after_year_abbr' => array(
+            'description' => 'Неразрывный пробел после года с сокращением «г.»',
+            'selector' => "Date.nbsp_after_year_abbr"
+        ),
 
 		'Space.many_spaces_to_one' => 'direct',
 		'Space.clear_percent' => 'direct',
 		'Space.clear_before_after_punct' => array( 'description' => 'Удаление пробелов перед и после знаков препинания в предложении', 'selector' => 'Space.remove_space_before_punctuationmarks'),
 		'Space.autospace_after' => array( 'description' => 'Расстановка пробелов после знаков препинания', 'selector' => 'Space.autospace_after_*'),
 		'Space.bracket_fix' => array( 'description' => 'Удаление пробелов внутри скобок, а также расстановка пробела перед скобками',
-				'selector' => array('Space.nbsp_before_open_quote', 'Punctmark.fix_brackets')),
+				'selector' => array('Space.nbsp_before_open_quote', 'Punctuation.fix_brackets')),
 
-		'Abbr.nbsp_money_abbr' => array( 'description' => 'Форматирование денежных сокращений (расстановка пробелов и привязка названия валюты к числу)',
-				'selector' => array('Abbr.nbsp_money_abbr', 'Abbr.nbsp_money_abbr_rev')),
-		'Abbr.nobr_vtch_itd_itp' => 'direct',
-		'Abbr.nobr_sm_im' => 'direct',
-		'Abbr.nobr_acronym' => 'direct',
-		'Abbr.nobr_locations' => 'direct',
-		'Abbr.nobr_abbreviation' => 'direct',
-		'Abbr.ps_pps' => 'direct',
-		'Abbr.nbsp_org_abbr' => 'direct',
-		'Abbr.nobr_gost' => 'direct',
-		'Abbr.nobr_before_unit_volt' => 'direct',
-		'Abbr.nbsp_before_unit' => 'direct',
+        // Abbreviation-related rules
+        'Abbr.nbsp_money_abbr' => array(
+            'description' => 'Форматирование денежных сокращений (расстановка пробелов и привязка названия валюты к числу)',
+            'selector' => array('Abbr.nbsp_money_abbr', 'Abbr.nbsp_money_abbr_rev')
+        ),
+        'Abbr.nobr_itd_itp' => 'direct',
+        'Abbr.nobr_sm_im' => 'direct',
+        'Abbr.nobr_acronym' => 'direct',
+        'Abbr.nobr_locations' => 'direct',
+        'Abbr.nobr_abbreviation' => 'direct',
+        'Abbr.ps_pps' => 'direct',
+        'Abbr.nbsp_org_abbr' => 'direct',
+        'Abbr.nobr_gost' => 'direct',
+        'Abbr.nobr_before_unit_volt' => 'direct',
+        'Abbr.nbsp_before_unit' => 'direct',
+        'Abbr.nbsp_te' => array(
+            'description' => 'Обработка сокращения «т.е.»',
+            'selector' => "Abbr.nbsp_te"
+        ),
 
 		'OptAlign.all' => array( 'description' => 'Все настройки оптического выравнивания', 'hide' => true, 'selector' => 'OptAlign.*'),
 		'OptAlign.oa_oquote' => 'direct',
@@ -117,31 +147,31 @@ class Typograph extends TypographBase
 	 *
 	 * @return array
 	 *     all    - полный список
-	 *     group  - сгруппированный по группам
+	 *     group  - собранный по группам
 	 */
-	public function get_options_list()
+	final public function get_options_list()
 	{
 		$arr['all'] = array();
-		$bygroup = array();
+		$by_group = array();
 		foreach($this->all_options as $opt => $op)
 		{
 			$arr['all'][$opt] = $this->get_option_info($opt);
 			$x = explode(".",$opt);
-			$bygroup[$x[0]][] = $opt;
+			$by_group[$x[0]][] = $opt;
 		}
 		$arr['group'] = array();
 		foreach($this->group_list as $group => $ginfo)
 		{
 			if($ginfo === true)
 			{
-				$tret = $this->get_tret($group);
-				if($tret) $info['title'] = $tret->title; else $info['title'] = "Не определено";
+				$trait = $this->get_trait($group);
+				if($trait) $info['title'] = $trait->title; else $info['title'] = "Не определено";
 			} else {
 				$info = $ginfo;
 			}
 			$info['name'] = $group;
 			$info['options'] = array();
-			if(is_array($bygroup[$group])) foreach($bygroup[$group] as $opt) $info['options'][] = $opt;
+			if(is_array($by_group[$group])) foreach($by_group[$group] as $opt) $info['options'][] = $opt;
 			$arr['group'][] = $info;
 		}
 		return $arr;
@@ -154,7 +184,7 @@ class Typograph extends TypographBase
 	 * @param string $key
 	 * @return array|false
 	 */
-	protected function get_option_info($key)
+	final protected function get_option_info($key)
 	{
 		if(!isset($this->all_options[$key])) return false;
 		if(is_array($this->all_options[$key])) return $this->all_options[$key];
@@ -162,11 +192,11 @@ class Typograph extends TypographBase
 		if(($this->all_options[$key] == "direct") || ($this->all_options[$key] == "reverse"))
 		{
 			$pa = explode(".", $key);
-			$tret_pattern = $pa[0];
-			$tret = $this->get_tret($tret_pattern);
-			if(!$tret) return false;
-			if(!isset($tret->rules[$pa[1]])) return false;
-			$array = $tret->rules[$pa[1]];
+			$trait_pattern = $pa[0];
+			$trait = $this->get_trait($trait_pattern);
+			if(!$trait) return false;
+			if(!isset($trait->rules[$pa[1]])) return false;
+			$array = $trait->rules[$pa[1]];
 			$array['way'] = $this->all_options[$key];
 			return $array;
 		}
@@ -180,7 +210,7 @@ class Typograph extends TypographBase
 	 * @param string $name
 	 * @param mixed $value
 	 */
-	public function do_setup($name, $value)
+	final public function do_setup($name, $value)
 	{
 		if(!isset($this->all_options[$name])) return;
 
@@ -194,9 +224,9 @@ class Typograph extends TypographBase
 		{
 			if(isset($this->all_options[$name]['selector']))
 			{
-				$settingname = "active";
-				if(isset($this->all_options[$name]['setting'])) $settingname = $this->all_options[$name]['setting'];
-				$this->set($this->all_options[$name]['selector'], $settingname, $value, isset($this->all_options[$name]['exact_selector']));
+				$setting_name = "active";
+				if(isset($this->all_options[$name]['setting'])) $setting_name = $this->all_options[$name]['setting'];
+				$this->set($this->all_options[$name]['selector'], $setting_name, $value, isset($this->all_options[$name]['exact_selector']));
 			}
 		}
 
@@ -215,7 +245,7 @@ class Typograph extends TypographBase
 	 * @param array $options
 	 * @return string
 	 */
-	public static function fast_apply($text, $options = null)
+	public static function fast_apply(string $text, $options = null)
 	{
 		$obj = new self();
 		if(is_array($options)) {

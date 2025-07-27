@@ -1,9 +1,9 @@
 <?php
 
-namespace Emuravjev\Mdash\Tret;
+namespace Emuravjev\Mdash\Traits;
 
 /**
- * @see \Emuravjev\Mdash\Tret\Base
+ * @see Base
  */
 
 class Etc extends Base
@@ -14,7 +14,7 @@ class Etc extends Base
 		);
 
 	/**
-	 * Базовые параметры тофа
+	 * Базовые параметры типографа
 	 *
 	 * @var array
 	 */
@@ -48,7 +48,7 @@ class Etc extends Base
 				//'function'	    => 'split_number'
 			),
 		'expand_no_nbsp_in_nobr' => array(
-				'description'	=> 'Удаление nbsp в nobr/nowrap тэгах',
+				'description'	=> 'Удаление nbsp в nobr/nowrap тегах',
 				'function'	=> 'remove_nbsp'
 			),
 		'nobr_to_nbsp' => array(
@@ -58,19 +58,19 @@ class Etc extends Base
 			),
 		);
 
-	protected function remove_nbsp()
+	final protected function remove_nbsp()
 	{
-		$thetag = $this->tag("###", 'span', array('class' => "nowrap"));
-		$arr = explode("###", $thetag);
+		$tag = $this->tag("###", 'span', array('class' => "nowrap"));
+		$arr = explode("###", $tag);
 		$b = preg_quote($arr[0], '/');
 		$e = preg_quote($arr[1], '/');
 
-		$match = '/(^|[^a-zа-яё])([a-zа-яё]+)\&nbsp\;('.$b.')/iu';
+		$match = '/(^|[^a-zа-яё])([a-zа-яё]+)&nbsp;('.$b.')/iu';
 		do {
 			$this->_text = preg_replace($match, '\1\3\2 ', $this->_text);
 		} while(preg_match($match, $this->_text));
 
-		$match = '/('.$e.')\&nbsp\;([a-zа-яё]+)($|[^a-zа-яё])/iu';
+		$match = '/('.$e.')&nbsp;([a-zа-яё]+)($|[^a-zа-яё])/iu';
 		do {
 			$this->_text = preg_replace($match, ' \2\1\3', $this->_text);
 		} while(preg_match($match, $this->_text));
@@ -78,28 +78,12 @@ class Etc extends Base
 		$this->_text = $this->preg_replace_e('/'.$b.'.*?'.$e.'/iue', 'str_replace("&nbsp;"," ",$m[0]);' , $this->_text );
 	}
 
-	protected function nobr_to_nbsp()
+	final protected function nobr_to_nbsp()
 	{
-		$thetag = $this->tag("###", 'span', array('class' => "nowrap"));
-		$arr = explode("###", $thetag);
+		$tag = $this->tag("###", 'span', array('class' => "nowrap"));
+		$arr = explode("###", $tag);
 		$b = preg_quote($arr[0], '/');
 		$e = preg_quote($arr[1], '/');
 		$this->_text = $this->preg_replace_e('/'.$b.'(.*?)'.$e.'/iue', 'str_replace(" ","&nbsp;",$m[1]);' , $this->_text );
 	}
-	/*
-	protected function split_number () {
-
-		$this->preg_replace_e("/([^a-zA-Z<]|^)([0-9]{5,})([^a-zA-Z>]|$)/u", )
-
-		$match = ;
-		while(preg_match($match, $this->_text, $m)) {
-			$repl = "";
-			for($i = strlen($m[2]); $i >=0 ; $i-=3)
-				if($i-3>=0) $repl = ($i>3?"&thinsp;":"").substr($m[2], $i-3, 3) . $repl; else $repl = substr($m[2], 0, $i) . $repl;
-			$this->_text = str_replace($m[1], $repl, $this->_text);
-		}
-	}*/
-
 }
-
-?>

@@ -1,18 +1,16 @@
 <?php
 
-namespace Emuravjev\Mdash\Tret;
+namespace Emuravjev\Mdash\Traits;
 
 /**
- * @see \Emuravjev\Mdash\Tret\Base
+ * @see Base
  */
 
 class Abbr extends Base
 {
 	public $title = "Сокращения";
 
-	public $domain_zones = array('ru','ру','com','ком','org','орг', 'уа', 'ua');
-
-	public $classes = array(
+    public $classes = array(
 			'nowrap'           => 'word-spacing:nowrap;',
 			);
 
@@ -71,7 +69,7 @@ class Abbr extends Base
 				'pattern' 		=> '/(^|\040|\t|\>|\r|\n)(p\.\040?)(p\.\040?)?(s\.)([^\<])/ie',
 				'replacement' 	=> '$m[1] . $this->tag(trim($m[2]) . " " . ($m[3] ? trim($m[3]) . " " : ""). $m[4], "span",  array("class" => "nowrap") ).$m[5] '
 			),
-		'nobr_vtch_itd_itp'     => array(
+		'nobr_itd_itp'     => array(
 				'description'	=> 'Объединение сокращений и т.д., и т.п., в т.ч.',
 				'cycled'		=> true,
 				'pattern' 		=> array(
@@ -95,7 +93,6 @@ class Abbr extends Base
 				'pattern' 		=> '/(\d)((\040|\&nbsp\;)?(тыс|млн|млрд)\.?(\040|\&nbsp\;)?)?(\040|\&nbsp\;)?(руб\.|долл\.|евро|€|&euro;|\$|у[\.]? ?е[\.]?)/ieu',
 				'replacement' 	=> '$m[1].($m[4]?"&nbsp;".$m[4].($m[4]=="тыс"?".":""):"")."&nbsp;".(!preg_match("#у[\\\\.]? ?е[\\\\.]?#iu",$m[7])?$m[7]:"у.е.")',
 				'replacement_python' => 'm.group(1)+(u"&nbsp;"+m.group(4)+(u"." if m.group(4)==u"тыс" else u"") if m.group(4) else u"")+u"&nbsp;"+(m.group(7) if not re.match(u"у[\\\\.]? ?е[\\\\.]?",m.group(7),re.I | re.U) else u"у.е.")'
-				//'replacement_py' => 'm.group(1)+(\"&nbsp;\"+m.group(4)+(m.group(4)==\"\u0442\u044b\u0441\"?\".\" if m.group(4) else \"\"):\"\")+\"&nbsp;\"+(m.group(7) if !preg_match(\"#\u0443[\\\\.]? ?\u0435[\\\\.]?#iu\",m.group(7)) else \"\u0443.\u0435.\")'
 			),
 		'nbsp_money_abbr_rev' => array(
 				'description'	=> 'Привязка валюты к числу спереди',
@@ -118,25 +115,5 @@ class Abbr extends Base
 						'$m[1]."ГОСТ ".$m[3]."&ndash;".$m[5]',
 						),
 			),
-			/*
-		'nobr_vtch_itd_itp'     => array(
-				'description'	=> 'Привязка сокращений до н.э., н.э.',
-				'pattern' 		=> array(
-
-				//IV в до н.э, в V-VIвв до нэ., третий в. н.э.
-
-						'/(\s|\&nbsp\;)и( |\&nbsp\;)т\.?[ ]?д\./ue',
-						'/(\s|\&nbsp\;)и( |\&nbsp\;)т\.?[ ]?п\./ue',
-						'/(\s|\&nbsp\;)в( |\&nbsp\;)т\.?[ ]?ч\./ue',
-					),
-				'replacement' 	=> array(
-						'$m[1].$this->tag("и т. д.", "span",  array("class" => "nowrap"))',
-						'$m[1].$this->tag("и т. п.", "span",  array("class" => "nowrap"))',
-						'$m[1].$this->tag("в т. ч.", "span",  array("class" => "nowrap"))',
-					)
-			),
-			*/
-
-
 		);
 }

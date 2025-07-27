@@ -1,15 +1,15 @@
 <?php
 
-namespace Emuravjev\Mdash\Tret;
+namespace Emuravjev\Mdash\Traits;
 
 /**
- * @see \Emuravjev\Mdash\Tret\Base
+ * @see Base
  */
 
 class Symbol extends Base
 {
 	/**
-	 * Базовые параметры тофа
+	 * Базовые параметры типографа
 	 *
 	 * @var array
 	 */

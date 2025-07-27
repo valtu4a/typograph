@@ -1,12 +1,12 @@
 <?php
 
-namespace Emuravjev\Mdash\Tret;
+namespace Emuravjev\Mdash\Traits;
 
 /**
- * @see \Emuravjev\Mdash\Tret\Base
+ * @see Base
  */
 
-class Punctmark extends Base
+class Punctuation extends Base
 {
 	public $title = "Пунктуация и знаки препинания";
 
@@ -37,7 +37,7 @@ class Punctmark extends Base
 				'pattern' 		=> '/([a-zа-яё0-9])\!\?(\s|$|\<)/ui',
 				'replacement' 	=> '\1?!\2'
 			),
-		'fix_pmarks' => array(
+		'fix_double_marks' => array(
 				'description'	=> 'Замена сдвоенных знаков препинания на одинарные',
 				'pattern' 		=> array(
 							'/([^\!\?])\.\./',
@@ -51,12 +51,12 @@ class Punctmark extends Base
 							),
 			),
 		'fix_brackets' => array(
-				'description'	=> 'Лишние пробелы после открывающей скобочки и перед закрывающей',
+				'description'	=> 'Лишние пробелы после открывающей скобки и перед закрывающей',
 				'pattern' 		=> array('/(\()(\040|\t)+/', '/(\040|\t)+(\))/'),
 				'replacement' 	=> array('\1', '\2')
 			),
 		'fix_brackets_space' => array(
-				'description'	=> 'Пробел перед открывающей скобочкой',
+				'description'	=> 'Пробел перед открывающей скобкой',
 				'pattern' 		=> '/([a-zа-яё])(\()/iu',
 				'replacement' 	=> '\1 \2'
 			),
@@ -64,7 +64,6 @@ class Punctmark extends Base
 				'description'	=> 'Точка в конце текста, если её там нет',
 				'disabled'      => true,
 				'pattern' 		=> '/([a-zа-яё0-9])(\040|\t|\&nbsp\;)*$/ui',
-				//'pattern' 		=> '/(([^\.\!\?])|(&(ra|ld)quo;))$/',
 				'replacement' 	=> '\1.'
 			),
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace Emuravjev\Mdash\Tret;
+namespace Emuravjev\Mdash\Traits;
 
 /**
- * @see \Emuravjev\Mdash\Tret\Base
+ * @see Base
  */
 
 class Space extends Base
@@ -87,17 +87,15 @@ class Space extends Base
 				'pattern' 		=> '/ +$/',
 				'replacement' 	=> ''
 			),
-		'no_space_posle_hellip' => array(
-				'description'	=> 'Отсутстввие пробела после троеточия после открывающей кавычки',
+		'no_space_after_hellip' => array(
+				'description'	=> 'Отсутствие пробела после многоточия после открывающей кавычки',
 				'pattern' 		=> '/(\&laquo\;|\&bdquo\;)( |\&nbsp\;)?\&hellip\;( |\&nbsp\;)?([a-zа-яё])/ui',
 				'replacement' 	=> '\1&hellip;\4'
 			),
-		'space_posle_goda' => array(
+		'space_after_year' => array(
 				'description'	=> 'Пробел после года',
 				'pattern' 		=> '/(^|\040|\&nbsp\;)([0-9]{3,4})(год([ауе]|ом)?)([^a-zа-яё]|$)/ui',
 				'replacement' 	=> '\1\2 \3\5'
 			),
 		);
 }
-
-?>

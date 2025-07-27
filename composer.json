@@ -4,18 +4,28 @@
     "keywords": ["типограф", "Муравьев", "typograph", "russian", "русский"],
     "license": "Public Domain",
     "version": "1.0.1",
-    "require": {},
+    "require": {
+        "php": ">=7.1",
+        "ext-mbstring": "*"
+    },
     "autoload": {
         "psr-4": {
             "Emuravjev\\Mdash\\": "src/"
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/TestCase.php"
-        ]
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.8 || ^5.7"
+        "phpunit/phpunit": "^9"
     }
 }

@@ -4,3 +4,5 @@
 .DS_Store
 desktop.ini
 Thumbs.db
+tests/log/
+.phpunit.result.cache

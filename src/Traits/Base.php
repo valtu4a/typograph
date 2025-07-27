@@ -1,13 +1,14 @@
 <?php
 
-namespace Emuravjev\Mdash\Tret;
+namespace Emuravjev\Mdash\Traits;
 
 use Emuravjev\Mdash\Lib;
 
 /**
  * Базовый класс для группы правил обработки текста
- * Класс группы должен наследовать, данный класс и задавать
- * в нём Emuravjev\Mdash\Tret\Base::rules и Emuravjev\Mdash\Tret\Base::$name
+ * Класс группы должен наследовать данный класс и задавать
+ * в нём Emuravjev\Mdash\Traits\Base::rules
+ * и Emuravjev\Mdash\Traits\Base::$name
  *
  */
 class Base {
@@ -406,7 +407,7 @@ class Base {
 	}
 
 	/**
-	 * Добавить настройку в трет
+	 * Добавить настройку в трейт
 	 *
 	 * @param string $key ключ
 	 * @param mixed $value значение
@@ -493,7 +494,7 @@ class Base {
 	 * @param mixed $list - список правил, null - все правила
 	 * @return string
 	 */
-	public function apply($list = null)
+	final public function apply($list = null)
 	{
 		if(is_string($list)) $rlist = array($list);
 		elseif(is_array($list)) $rlist = $list;

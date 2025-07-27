@@ -76,10 +76,23 @@ class Typograph extends TypographBase
 		'Number.thinsp_between_no_and_number' => 'direct',
 		'Number.thinsp_between_sect_and_number' => 'direct',
 
-		'Date.years' => 'direct',
-		'Date.mdash_month_interval' => 'direct',
-		'Date.nbsp_and_dash_month_interval' => 'direct',
-		'Date.nobr_year_in_date' => 'direct',
+        // Date-related rules
+        'Date.years' => 'direct', // Matches years
+        'Date.mdash_month_interval' => 'direct', // Matches mdash_month_interval
+        'Date.nbsp_and_dash_month_interval' => 'direct', // Matches nbsp_and_dash_month_interval
+        'Date.nobr_year_in_date' => 'direct', // Matches nobr_year_in_date
+        'Date.nbsp_before_month' => array(
+            'description' => 'Неразрывный пробел в датах перед числом и месяцем',
+            'selector' => "Date.nbsp_before_month"
+        ),
+        'Date.space_after_year' => array(
+            'description' => 'Пробел после года',
+            'selector' => "Date.space_after_year"
+        ),
+        'Date.nbsp_after_year_abbr' => array(
+            'description' => 'Неразрывный пробел после года с сокращением «г.»',
+            'selector' => "Date.nbsp_after_year_abbr"
+        ),
 
 		'Space.many_spaces_to_one' => 'direct',
 		'Space.clear_percent' => 'direct',
@@ -88,18 +101,25 @@ class Typograph extends TypographBase
 		'Space.bracket_fix' => array( 'description' => 'Удаление пробелов внутри скобок, а также расстановка пробела перед скобками',
 				'selector' => array('Space.nbsp_before_open_quote', 'Punctmark.fix_brackets')),
 
-		'Abbr.nbsp_money_abbr' => array( 'description' => 'Форматирование денежных сокращений (расстановка пробелов и привязка названия валюты к числу)',
-				'selector' => array('Abbr.nbsp_money_abbr', 'Abbr.nbsp_money_abbr_rev')),
-		'Abbr.nobr_itd_itp' => 'direct',
-		'Abbr.nobr_sm_im' => 'direct',
-		'Abbr.nobr_acronym' => 'direct',
-		'Abbr.nobr_locations' => 'direct',
-		'Abbr.nobr_abbreviation' => 'direct',
-		'Abbr.ps_pps' => 'direct',
-		'Abbr.nbsp_org_abbr' => 'direct',
-		'Abbr.nobr_gost' => 'direct',
-		'Abbr.nobr_before_unit_volt' => 'direct',
-		'Abbr.nbsp_before_unit' => 'direct',
+        // Abbreviation-related rules
+        'Abbr.nbsp_money_abbr' => array(
+            'description' => 'Форматирование денежных сокращений (расстановка пробелов и привязка названия валюты к числу)',
+            'selector' => array('Abbr.nbsp_money_abbr', 'Abbr.nbsp_money_abbr_rev')
+        ),
+        'Abbr.nobr_itd_itp' => 'direct',
+        'Abbr.nobr_sm_im' => 'direct',
+        'Abbr.nobr_acronym' => 'direct',
+        'Abbr.nobr_locations' => 'direct',
+        'Abbr.nobr_abbreviation' => 'direct',
+        'Abbr.ps_pps' => 'direct',
+        'Abbr.nbsp_org_abbr' => 'direct',
+        'Abbr.nobr_gost' => 'direct',
+        'Abbr.nobr_before_unit_volt' => 'direct',
+        'Abbr.nbsp_before_unit' => 'direct',
+        'Abbr.nbsp_te' => array(
+            'description' => 'Обработка сокращения «т.е.»',
+            'selector' => "Abbr.nbsp_te"
+        ),
 
 		'OptAlign.all' => array( 'description' => 'Все настройки оптического выравнивания', 'hide' => true, 'selector' => 'OptAlign.*'),
 		'OptAlign.oa_oquote' => 'direct',

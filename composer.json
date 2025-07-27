@@ -3,7 +3,7 @@
     "description": "PHP версия типографа Муравьева",
     "keywords": ["типограф", "Муравьев", "typograph", "russian", "русский"],
     "license": "Public Domain",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "require": {},
     "autoload": {
         "psr-4": {

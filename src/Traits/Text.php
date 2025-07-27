@@ -1,11 +1,11 @@
 <?php
 
-namespace Emuravjev\Mdash\Tret;
+namespace Emuravjev\Mdash\Traits;
 
 use Emuravjev\Mdash\Lib;
 
 /**
- * @see \Emuravjev\Mdash\Tret\Base
+ * @see Base
  */
 
 class Text extends Base
@@ -15,7 +15,7 @@ class Text extends Base
 		);
 
 	/**
-	 * Базовые параметры тофа
+	 * Базовые параметры типографа
 	 *
 	 * @var array
 	 */
@@ -59,7 +59,7 @@ class Text extends Base
 	 *
 	 * @return  void
 	 */
-	protected function do_paragraphs($text) {
+	final protected function do_paragraphs($text) {
 		$text = str_replace("\r\n","\n",$text);
 		$text = str_replace("\r","\n",$text);
 		$text = '<' . self::BASE64_PARAGRAPH_TAG . '>' . trim($text) . '</' . self::BASE64_PARAGRAPH_TAG . '>';
@@ -67,8 +67,8 @@ class Text extends Base
 		//$text = $this->preg_replace_e('/([\040\t]+)?(\n){2,}/e', '"</" . self::BASE64_PARAGRAPH_TAG . "><" .self::BASE64_PARAGRAPH_TAG . ">"', $text);
 		$text = $this->preg_replace_e('/([\040\t]+)?(\n)+([\040\t]*)(\n)+/e', '$m[1]."</" . self::BASE64_PARAGRAPH_TAG . ">".Emuravjev\Mdash\Lib::iblock($m[2].$m[3])."<" .self::BASE64_PARAGRAPH_TAG . ">"', $text);
 		//$text = $this->preg_replace_e('/([\040\t]+)?(\n)+([\040\t]*)(\n)+/e', '"</" . self::BASE64_PARAGRAPH_TAG . ">"."<" .self::BASE64_PARAGRAPH_TAG . ">"', $text);
-		//может от открвающего до закрывающего ?!
-		$text = preg_replace('/\<' . self::BASE64_PARAGRAPH_TAG . '\>('.Lib::INTERNAL_BLOCK_OPEN.'[a-zA-Z0-9\/=]+?'.Lib::INTERNAL_BLOCK_CLOSE.')?\<\/' . self::BASE64_PARAGRAPH_TAG . '\>/s', "", $text);
+		//может от открывающего до закрывающего ?!
+		$text = preg_replace('/<' . self::BASE64_PARAGRAPH_TAG . '>('.Lib::INTERNAL_BLOCK_OPEN.'[a-zA-Z0-9\/=]+?'.Lib::INTERNAL_BLOCK_CLOSE.')?<\/' . self::BASE64_PARAGRAPH_TAG . '>/s', "", $text);
 		return $text;
 	}
 
@@ -99,11 +99,11 @@ class Text extends Base
 	 *
 	 * @return  void
 	 */
-	protected function build_brs()
+	final protected function build_brs()
 	{
-		$this->_text = $this->preg_replace_e('/(\<\/' . self::BASE64_PARAGRAPH_TAG . '\>)([\r\n \t]+)(\<' . self::BASE64_PARAGRAPH_TAG . '\>)/mse', '$m[1].Emuravjev\Mdash\Lib::iblock($m[2]).$m[3]', $this->_text);
+		$this->_text = $this->preg_replace_e('/(<\/' . self::BASE64_PARAGRAPH_TAG . '>)([\r\n \t]+)(<' . self::BASE64_PARAGRAPH_TAG . '>)/mse', '$m[1].Emuravjev\Mdash\Lib::iblock($m[2]).$m[3]', $this->_text);
 
-		if (!preg_match('/\<' . self::BASE64_BREAKLINE_TAG . '\>/', $this->_text)) {
+		if (!preg_match('/<' . self::BASE64_BREAKLINE_TAG . '>/', $this->_text)) {
 			$this->_text = str_replace("\r\n","\n",$this->_text);
 			$this->_text = str_replace("\r","\n",$this->_text);
 			//$this->_text = $this->preg_replace_e('/(\n|\r)/e', '"<" . self::BASE64_BREAKLINE_TAG . ">"', $this->_text);
@@ -111,4 +111,3 @@ class Text extends Base
 		}
 	}
 }
-?>

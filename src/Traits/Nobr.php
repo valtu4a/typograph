@@ -1,9 +1,9 @@
 <?php
 
-namespace Emuravjev\Mdash\Tret;
+namespace Emuravjev\Mdash\Traits;
 
 /**
- * @see \Emuravjev\Mdash\Tret\Base
+ * @see Base
  */
 
 class Nobr extends Base
@@ -94,7 +94,7 @@ class Nobr extends Base
 				'pattern' 		=> '/как то\:/ui',
 				'replacement' 	=> 'как&nbsp;то:'
 			),
-		'nbsp_celcius' => array(
+		'nbsp_celsius' => array(
 				'description'	=> 'Привязка градусов к числу',
 				'pattern' 		=> '/(\s|^|\>|\&nbsp\;)(\d+)( |\&nbsp\;)?(°|\&deg\;)(C|С)(\s|\.|\!|\?|\,|$|\&nbsp\;|\;)/iu',
 				'replacement' 	=> '\1\2&nbsp;\4C\6'
@@ -116,12 +116,12 @@ class Nobr extends Base
 		);
 
 	/**
-	 * Объединение IP-адрессов в неразрывные конструкции (IPv4 only)
+	 * Объединение IP-адресов в неразрывные конструкции (IPv4 only)
 	 *
 	 * @param mixed $triads
 	 * @return mixed
 	 */
-	protected function nowrap_ip_address($triads)
+	final function nowrap_ip_address($triads)
 	{
 		$triad = explode('.', $triads);
 		$addTag = true;
@@ -141,25 +141,3 @@ class Nobr extends Base
 		return $triads;
 	}
 }
-/**PYTHON
-    # * Объединение IP-адрессов в неразрывные конструкции (IPv4 only)
-    # *
-    # * @param unknown_type $triads
-    # * @return unknown
-    def nowrap_ip_address(self, triads):
-        triad = triads.split('.')
-        addTag = True
-
-        for value in triad:
-            value = int(value)
-            if (value > 255):
-                addTag = false
-                break
-
-        if (addTag == True):
-            triads = self.tag(triads, 'span', {'class': "nowrap"})
-
-        return triads
-
-PYTHON**/
-?>

@@ -4,7 +4,9 @@
     "keywords": ["типограф", "Муравьев", "typograph", "russian", "русский"],
     "license": "Public Domain",
     "version": "1.0.1",
-    "require": {},
+    "require": {
+      "ext-mbstring": "*"
+    },
     "autoload": {
         "psr-4": {
             "Emuravjev\\Mdash\\": "src/"

@@ -1,9 +1,9 @@
 <?php
 
-namespace Emuravjev\Mdash\Tret;
+namespace Emuravjev\Mdash\Traits;
 
 /**
- * @see \Emuravjev\Mdash\Tret\Base
+ * @see Base
  */
 
 class OptAlign extends Base
@@ -21,7 +21,7 @@ class OptAlign extends Base
 		);
 
 	/**
-	 * Базовые параметры тофа
+	 * Базовые параметры типографа
 	 *
 	 * @var array
 	 */

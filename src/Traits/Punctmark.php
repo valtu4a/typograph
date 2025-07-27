@@ -1,9 +1,9 @@
 <?php
 
-namespace Emuravjev\Mdash\Tret;
+namespace Emuravjev\Mdash\Traits;
 
 /**
- * @see \Emuravjev\Mdash\Tret\Base
+ * @see Base
  */
 
 class Punctmark extends Base

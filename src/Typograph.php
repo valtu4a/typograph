@@ -4,7 +4,7 @@ namespace Emuravjev\Mdash;
 
 class Typograph extends TypographBase
 {
-	public $trets = array('Quote', 'Dash', 'Symbol', 'Punctmark', 'Number',  'Space', 'Abbr',  'Nobr', 'Date', 'OptAlign', 'Etc', 'Text');
+	public $traits = array('Quote', 'Dash', 'Symbol', 'Punctmark', 'Number',  'Space', 'Abbr',  'Nobr', 'Date', 'OptAlign', 'Etc', 'Text');
 
 	protected $group_list  = array(
 		'Quote'     => true,
@@ -29,17 +29,26 @@ class Typograph extends TypographBase
 		'Dash.iz_za_pod' => 'direct',
 		'Dash.ka_de_kas' => 'direct',
 
-		'Nobr.super_nbsp' => 'direct',
-		'Nobr.nbsp_in_the_end' => 'direct',
-		'Nobr.phone_builder' => 'direct',
-		'Nobr.phone_builder_v2' => 'direct',
-		'Nobr.ip_address' => 'direct',
-		'Nobr.spaces_nobr_in_surname_abbr' => 'direct',
-		'Nobr.dots_for_surname_abbr' => 'direct',
-		'Nobr.nbsp_celcius' => 'direct',
-		'Nobr.hyphen_nowrap_in_small_words' => 'direct',
-		'Nobr.hyphen_nowrap' => 'direct',
-		'Nobr.nowrap' => array('description' => 'Nobr (по умолчанию) & nowrap', 'disabled' => true, 'selector' => '*', 'setting' => 'nowrap' ),
+        'Nobr.super_nbsp' => 'direct',
+        'Nobr.nbsp_in_the_end' => 'direct',
+        'Nobr.phone_builder' => 'direct',
+        'Nobr.phone_builder_v2' => 'direct',
+        'Nobr.ip_address' => 'direct',
+        'Nobr.spaces_nobr_in_surname_abbr' => 'direct',
+        'Nobr.dots_for_surname_abbr' => 'direct',
+        'Nobr.nbsp_celsius' => 'direct',
+        'Nobr.hyphen_nowrap_in_small_words' => 'direct',
+        'Nobr.hyphen_nowrap' => 'direct',
+        'Nobr.nowrap' => array(
+            'description' => 'Nobr (по умолчанию) & nowrap',
+            'disabled' => true,
+            'selector' => '*',
+            'setting' => 'nowrap'
+        ),
+        'Nobr.twosym_abbr' => array(
+            'description' => 'Неразрывный пробел перед двухсимвольной аббревиатурой',
+            'selector' => "Nobr.nobr_twosym_abbr"
+        ),
 
 		'Symbol.tm_replace'     => 'direct',
 		'Symbol.r_sign_replace' => 'direct',
@@ -81,7 +90,7 @@ class Typograph extends TypographBase
 
 		'Abbr.nbsp_money_abbr' => array( 'description' => 'Форматирование денежных сокращений (расстановка пробелов и привязка названия валюты к числу)',
 				'selector' => array('Abbr.nbsp_money_abbr', 'Abbr.nbsp_money_abbr_rev')),
-		'Abbr.nobr_vtch_itd_itp' => 'direct',
+		'Abbr.nobr_itd_itp' => 'direct',
 		'Abbr.nobr_sm_im' => 'direct',
 		'Abbr.nobr_acronym' => 'direct',
 		'Abbr.nobr_locations' => 'direct',
@@ -134,8 +143,8 @@ class Typograph extends TypographBase
 		{
 			if($ginfo === true)
 			{
-				$tret = $this->get_tret($group);
-				if($tret) $info['title'] = $tret->title; else $info['title'] = "Не определено";
+				$trait = $this->get_trait($group);
+				if($trait) $info['title'] = $trait->title; else $info['title'] = "Не определено";
 			} else {
 				$info = $ginfo;
 			}
@@ -162,11 +171,11 @@ class Typograph extends TypographBase
 		if(($this->all_options[$key] == "direct") || ($this->all_options[$key] == "reverse"))
 		{
 			$pa = explode(".", $key);
-			$tret_pattern = $pa[0];
-			$tret = $this->get_tret($tret_pattern);
-			if(!$tret) return false;
-			if(!isset($tret->rules[$pa[1]])) return false;
-			$array = $tret->rules[$pa[1]];
+			$trait_pattern = $pa[0];
+			$trait = $this->get_trait($trait_pattern);
+			if(!$trait) return false;
+			if(!isset($trait->rules[$pa[1]])) return false;
+			$array = $trait->rules[$pa[1]];
 			$array['way'] = $this->all_options[$key];
 			return $array;
 		}

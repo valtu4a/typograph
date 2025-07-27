@@ -1,9 +1,9 @@
 <?php
 
-namespace Emuravjev\Mdash\Tret;
+namespace Emuravjev\Mdash\Traits;
 
 /**
- * @see \Emuravjev\Mdash\Tret\Base
+ * @see Base
  */
 
 class Date extends Base
@@ -43,12 +43,12 @@ class Date extends Base
 					'$m[1].$this->tag($m[2],"span", array("class"=>"nowrap")).$m[4]',
 					),
 			),
-		'space_posle_goda' => array(
+		'space_after_year' => array(
 				'description'	=> 'Пробел после года',
 				'pattern' 		=> '/(^|\040|\&nbsp\;)([0-9]{3,4})(год([ауе]|ом)?)([^a-zа-яё]|$)/ui',
 				'replacement' 	=> '\1\2 \3\5'
 			),
-		'nbsp_posle_goda_abbr' => array(
+		'nbsp_after_year_abbr' => array(
 				'description'	=> 'Пробел после года',
 				'pattern' 		=> '/(^|\040|\&nbsp\;|\"|\&laquo\;)([0-9]{3,4})[ ]?(г\.)([^a-zа-яё]|$)/ui',
 				'replacement' 	=> '\1\2&nbsp;\3\4'
@@ -56,5 +56,3 @@ class Date extends Base
 
 		);
 }
-
-?>

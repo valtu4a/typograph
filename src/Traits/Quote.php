@@ -1,17 +1,17 @@
 <?php
 
-namespace Emuravjev\Mdash\Tret;
+namespace Emuravjev\Mdash\Traits;
 
 use Emuravjev\Mdash\Lib;
 
 /**
- * @see \Emuravjev\Mdash\Tret\Base
+ * @see Base
  */
 
 class Quote extends Base
 {
 	/**
-	 * Базовые параметры тофа
+	 * Базовые параметры типографа
 	 *
 	 * @var array
 	 */
@@ -186,5 +186,3 @@ class Quote extends Base
 	}
 
 }
-
-?>

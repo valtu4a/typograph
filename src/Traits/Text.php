@@ -77,7 +77,7 @@ class Text extends Base
 	 *
 	 * @return  void
 	 */
-	protected function build_paragraphs()
+	final public function build_paragraphs()
 	{
 		$r = mb_strpos($this->_text, '<' . self::BASE64_PARAGRAPH_TAG . '>' );
 		$p = Lib::rstrpos($this->_text, '</' . self::BASE64_PARAGRAPH_TAG . '>' )	;
@@ -99,14 +99,13 @@ class Text extends Base
 	 *
 	 * @return  void
 	 */
-	final protected function build_brs()
+	final public function build_brs()
 	{
 		$this->_text = $this->preg_replace_e('/(<\/' . self::BASE64_PARAGRAPH_TAG . '>)([\r\n \t]+)(<' . self::BASE64_PARAGRAPH_TAG . '>)/mse', '$m[1].Emuravjev\Mdash\Lib::iblock($m[2]).$m[3]', $this->_text);
 
 		if (!preg_match('/<' . self::BASE64_BREAKLINE_TAG . '>/', $this->_text)) {
 			$this->_text = str_replace("\r\n","\n",$this->_text);
 			$this->_text = str_replace("\r","\n",$this->_text);
-			//$this->_text = $this->preg_replace_e('/(\n|\r)/e', '"<" . self::BASE64_BREAKLINE_TAG . ">"', $this->_text);
 			$this->_text = $this->preg_replace_e('/(\n)/e', '"<" . self::BASE64_BREAKLINE_TAG . ">\n"', $this->_text);
 		}
 	}

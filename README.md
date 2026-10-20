@@ -228,6 +228,26 @@ $result = $typograph->apply();
 echo $result;
 ```
 
+### Защита от сбоев
+
+При любом сбое `apply()` возвращает исходный текст, а не пустую строку. Причина попадает в `$errors`, `$ok` становится `false`:
+
+```php
+$this->typographer->set_text($text);
+$result = $this->typographer->apply();
+
+if (!$this->typographer->ok) {
+    // $this->typographer->errors — список причин
+}
+```
+
+Текст длиннее `$max_length` байт (по умолчанию 200 000) не обрабатывается, `0` снимает ограничение:
+```php
+$this->typographer->max_length = 500000;
+```
+
+Не типографируются содержимое `<pre>`, `<code>`, `<script>`, `<style>`, `<notg>` и PHP-код `<?php … ?>`.
+
 ---
 ### Запуск тестов
 

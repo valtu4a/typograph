@@ -36,6 +36,15 @@ class TypographBase
 
 	public $settings = array();
 
+	/**
+	 * Текст длиннее этого порога (в байтах) возвращается без обработки:
+	 * на длинном тексте preg_* упирается в лимиты PCRE и молча возвращает null.
+	 * 0 — без ограничения.
+	 *
+	 * @var int
+	 */
+	public $max_length = 200000;
+
 	final protected function log($str, $data = null)
 	{
 		if(!$this->logging) return;
@@ -198,13 +207,14 @@ class TypographBase
     {
     	if (count($this->_safe_blocks))
     	{
-    		$safeType = true === $way ? "Lib::encrypt_tag(\$m[2])" : "stripslashes(Lib::decrypt_tag(\$m[2]))";
     		$safeBlocks = true === $way ? $this->_safe_blocks : array_reverse($this->_safe_blocks);
        		foreach ($safeBlocks as $block)
        		{
                 $text = preg_replace_callback(
                     "/({$block['open']})(.+?)({$block['close']})/s",
-                    function($m) { return $m[1].'.$safeType . '.$m[3]; },
+                    function($m) use ($way) {
+                        return $m[1] . (true === $way ? Lib::encrypt_tag($m[2]) : stripslashes(Lib::decrypt_tag($m[2]))) . $m[3];
+                    },
                     $text
                 );
         	}
@@ -264,10 +274,13 @@ class TypographBase
 		if(!$this->initialized)
 		{
 			$this->add_safe_tag('pre');
+			$this->add_safe_tag('code');
 			$this->add_safe_tag('script');
 			$this->add_safe_tag('style');
 			$this->add_safe_tag('notg');
 			$this->add_safe_block('span-notg', '<span class="_notg_start"></span>', '<span class="_notg_end"></span>');
+			// PHP-код: без защиты тег обрывается на "->", и кавычки в коде становятся ёлочками
+			$this->add_safe_block('php', '<?', '?>');
 		}
 		$this->initialized = true;
 	}
@@ -363,10 +376,63 @@ class TypographBase
 	/**
 	 * Запустить типограф на выполнение
 	 *
+	 * При любом сбое возвращается исходный текст, а причина попадает в $errors.
+	 * Пустая строка вместо текста означала бы потерю контента при сохранении.
+	 *
+	 * @param mixed $traits
+	 * @return string
 	 */
 	public function apply($traits = null)
 	{
 		$this->ok = false;
+		$this->errors = array();
+		$source = (string) $this->_text;
+
+		if ($source === '') {
+			$this->ok = true;
+			return '';
+		}
+
+		if ($this->max_length > 0 && strlen($source) > $this->max_length) {
+			$this->error('Текст длиннее ' . $this->max_length . ' байт, оставлен без обработки');
+			return $source;
+		}
+
+		// значений по умолчанию не хватает на длинные тексты с плотной вёрсткой
+		$backtrack = ini_get('pcre.backtrack_limit');
+		$recursion = ini_get('pcre.recursion_limit');
+		@ini_set('pcre.backtrack_limit', '10000000');
+		@ini_set('pcre.recursion_limit', '500000');
+
+		try {
+			$result = $this->apply_unsafe($traits);
+		} catch (\Throwable $e) {
+			$this->error('Исключение ' . get_class($e) . ': ' . $e->getMessage());
+			$result = null;
+		} finally {
+			@ini_set('pcre.backtrack_limit', $backtrack);
+			@ini_set('pcre.recursion_limit', $recursion);
+		}
+
+		// preg_* при сбое возвращает null, дальше по цепочке он превращается в пустую строку
+		if (!is_string($result) || ($result === '' && trim($source) !== '')) {
+			$this->error('Обработка не удалась, текст оставлен как есть');
+			$this->ok = false;
+			$this->_text = $source;
+			return $source;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Собственно типографирование, без защиты от сбоев
+	 *
+	 * @param mixed $traits
+	 * @return string
+	 */
+	private function apply_unsafe($traits = null)
+	{
 
 		$this->init();
 		$this->_init();

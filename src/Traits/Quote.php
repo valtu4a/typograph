@@ -17,6 +17,12 @@ class Quote extends Base
 	 */
 	public $title = "Кавычки";
 
+	/**
+	 * Метки тегов <q> на время расстановки лапок
+	 */
+	const Q_TAG_OPEN = '%%%QTAGO%%%';
+	const Q_TAG_CLOSE = '%%%QTAGC%%%';
+
 
     public $rules = array(
 		'quotes_outside_a' => array(
@@ -94,14 +100,25 @@ class Quote extends Base
 
 		foreach($texts_in as $textx) {
 
+			// <q> сам рисует внешние кавычки через CSS, поэтому кавычки внутри него — вложенные.
+			// Теги здесь уже зашифрованы, на время подсчёта заменяем их метками
+			$qtags = array();
+			$textx = preg_replace_callback('/<(\/?)([^<>]+)>/', function($m) use (&$qtags) {
+				if(!preg_match('/^q(\s|$)/i', Lib::decrypt_tag($m[2]))) return $m[0];
+				$qtags[] = $m[0];
+				return $m[1] ? self::Q_TAG_CLOSE : self::Q_TAG_OPEN;
+			}, $textx);
+
 			$okposstack = array('0');
 			$okpos = 0;
 			$level = 0;
 			$off = 0;
 			while(true)
 			{
-				$p = Lib::strpos_ex($textx, array("&laquo;", "&raquo;"), $off);
+				$p = Lib::strpos_ex($textx, array("&laquo;", "&raquo;", self::Q_TAG_OPEN, self::Q_TAG_CLOSE), $off);
 				if($p===false) break;
+				if($p['str'] == self::Q_TAG_OPEN) $level++;
+				if($p['str'] == self::Q_TAG_CLOSE) $level--;
 				if($p['str'] == "&laquo;")
 				{
 					if($level>0) if(!$this->is_on('no_bdquotes')) $this->inject_in($p['pos'], self::QUOTE_CRAWSE_OPEN, $textx);
@@ -179,6 +196,11 @@ class Quote extends Base
 					$k = str_replace(self::QUOTE_CRAWSE_CLOSE, self::QUOTE_FIRS_CLOSE, $k);
 					$textx = substr($textx, 0, $okpos). $k;
 				}
+			}
+			if($qtags)
+			{
+				$textx = preg_replace_callback('/'.preg_quote(self::Q_TAG_OPEN, '/').'|'.preg_quote(self::Q_TAG_CLOSE, '/').'/',
+					function() use (&$qtags) { return array_shift($qtags); }, $textx);
 			}
 			$texts_out[] = $textx;
 		}
